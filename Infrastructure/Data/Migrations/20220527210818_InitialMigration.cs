@@ -14,17 +14,6 @@ namespace Infrastructure.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "CustomerBasket",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CustomerBasket", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Genre",
                 columns: table => new
                 {
@@ -67,6 +56,21 @@ namespace Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "OrderItem",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TrackId = table.Column<int>(type: "int", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrderItem", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Producer",
                 columns: table => new
                 {
@@ -103,27 +107,6 @@ namespace Infrastructure.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_User", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "OrderItem",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    TrackId = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
-                    CustomerBasketId = table.Column<string>(type: "nvarchar(450)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_OrderItem", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_OrderItem_CustomerBasket_CustomerBasketId",
-                        column: x => x.CustomerBasketId,
-                        principalTable: "CustomerBasket",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -173,6 +156,31 @@ namespace Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Cart",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Subtotal = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Comment = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PaymentMethod = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Payment = table.Column<bool>(type: "bit", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Cart", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Cart_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Order",
                 columns: table => new
                 {
@@ -183,21 +191,42 @@ namespace Infrastructure.Data.Migrations
                     Comment = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PaymentMethod = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Payment = table.Column<bool>(type: "bit", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    CustomerBasketId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Order", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Order_CustomerBasket_CustomerBasketId",
-                        column: x => x.CustomerBasketId,
-                        principalTable: "CustomerBasket",
-                        principalColumn: "Id");
-                    table.ForeignKey(
                         name: "FK_Order_User_UserId",
                         column: x => x.UserId,
                         principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CartItem",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CartId = table.Column<int>(type: "int", nullable: false),
+                    TrackId = table.Column<int>(type: "int", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CartItem", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CartItem_Cart_CartId",
+                        column: x => x.CartId,
+                        principalTable: "Cart",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CartItem_Track_TrackId",
+                        column: x => x.TrackId,
+                        principalTable: "Track",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -251,9 +280,14 @@ namespace Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Cart",
+                columns: new[] { "Id", "Address", "Comment", "OrderDate", "Payment", "PaymentMethod", "Subtotal", "UserId" },
+                values: new object[] { 1, "Vojvodjanska 71, Indjija", "", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false, "", 14.52m, 1 });
+
+            migrationBuilder.InsertData(
                 table: "Order",
-                columns: new[] { "Id", "Comment", "CustomerBasketId", "OrderDate", "Payment", "PaymentMethod", "Subtotal", "UserId" },
-                values: new object[] { 1, "", null, new DateTime(2022, 4, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), false, "On recieve", 10.23m, 2 });
+                columns: new[] { "Id", "Comment", "OrderDate", "Payment", "PaymentMethod", "Subtotal", "UserId" },
+                values: new object[] { 1, "", new DateTime(2022, 4, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), false, "On recieve", 10.23m, 2 });
 
             migrationBuilder.InsertData(
                 table: "Track",
@@ -266,20 +300,30 @@ namespace Infrastructure.Data.Migrations
                     { 4, 3.23m, 2, 2, 2, "picture", 14.99m, 2, new DateTime(2017, 6, 7, 0, 0, 0, 0, DateTimeKind.Unspecified), 20, "More than you know" }
                 });
 
+            migrationBuilder.InsertData(
+                table: "CartItem",
+                columns: new[] { "Id", "CartId", "Quantity", "TrackId" },
+                values: new object[] { 1, 1, 1, 1 });
+
             migrationBuilder.CreateIndex(
-                name: "IX_Order_CustomerBasketId",
-                table: "Order",
-                column: "CustomerBasketId");
+                name: "IX_Cart_UserId",
+                table: "Cart",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CartItem_CartId",
+                table: "CartItem",
+                column: "CartId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CartItem_TrackId",
+                table: "CartItem",
+                column: "TrackId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Order_UserId",
                 table: "Order",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_OrderItem_CustomerBasketId",
-                table: "OrderItem",
-                column: "CustomerBasketId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Track_GenreId",
@@ -306,19 +350,22 @@ namespace Infrastructure.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "CartItem");
+
+            migrationBuilder.DropTable(
                 name: "Order");
 
             migrationBuilder.DropTable(
                 name: "OrderItem");
 
             migrationBuilder.DropTable(
+                name: "Cart");
+
+            migrationBuilder.DropTable(
                 name: "Track");
 
             migrationBuilder.DropTable(
                 name: "User");
-
-            migrationBuilder.DropTable(
-                name: "CustomerBasket");
 
             migrationBuilder.DropTable(
                 name: "Genre");

@@ -1,5 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {ITrack} from "../../shared/models/track";
+import {ShopComponent} from "../shop.component";
+import {ShopService} from "../shop.service";
+
 
 @Component({
   selector: 'app-track-item',
@@ -9,9 +12,12 @@ import {ITrack} from "../../shared/models/track";
 export class TrackItemComponent implements OnInit {
 
   @Input() track : ITrack;
-  constructor() { }
+  constructor(private shopService: ShopService) { }
 
   ngOnInit(): void {
   }
 
+  addToCart(track: any){
+    this.shopService.addToCart(track);
+  }
 }

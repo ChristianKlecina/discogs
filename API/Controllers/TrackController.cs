@@ -36,12 +36,12 @@ public class TrackController : BaseApiController
     }
     
     [HttpGet("{id}")]
-    public async Task<ActionResult<Track>> GetTrack(int id)
+    public async Task<ActionResult<TrackToReturnDto>> GetTrack(int id)
     {
         var spec = new TracksSpecification(id);
         var track = await _trackRepo.GetEntityWithSpec(spec);
-        //return _mapper.Map<Track, TrackToReturnDto>(track);
-        return track;
+        return _mapper.Map<Track, TrackToReturnDto>(track);
+        //return track;
 
     }
 

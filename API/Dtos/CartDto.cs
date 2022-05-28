@@ -1,10 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using Core.Entities;
 
-namespace Core.Entities;
+namespace API.Dtos;
 
-public class Order : BaseEntity
+public class CartDto
 {
-
+    public int Id { get; set; }
+    
     public DateTime OrderDate { get; set; }
     
     public decimal Subtotal { get; set; }
@@ -15,15 +17,10 @@ public class Order : BaseEntity
     
     public bool Payment { get; set; }
     
+    public string Address { get; set; }
     
     [ForeignKey("Id")]
     public int UserId { get; set; }
-    
-    public virtual User User { get; set; }
-    
-    
-    
-    //public virtual CustomerBasket CustomerBasket { get; set; }
 
-    public List<CartItem> CartItems = new List<CartItem>();
+    public List<CartItemDto> CartItems = new List<CartItemDto>();
 }

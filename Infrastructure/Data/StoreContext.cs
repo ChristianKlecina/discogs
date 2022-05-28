@@ -23,15 +23,15 @@ public class StoreContext : DbContext
 
     public DbSet<Order> Order { get; set; }
 
-    
-
     public DbSet<User> User { get; set; }
 
     public DbSet<Track> Track { get; set; }
 
     public DbSet<Producer> Producer { get; set; }
     
+    public DbSet<Cart> Cart { get; set; }
     
+    public DbSet<CartItem> CartItem { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -217,7 +217,29 @@ public class StoreContext : DbContext
                 Role = "Admin"
             }
             );
-            
+
+        modelBuilder.Entity<Cart>().HasData(
+            new
+            {
+                Id = 1,
+                OrderDate = new DateTime(),
+                Subtotal = 14.52M,
+                Comment = "",
+                Address = "Vojvodjanska 71, Indjija",
+                PaymentMethod = "",
+                Payment = false,
+                UserId = 1
+            }
+            );
+        modelBuilder.Entity<CartItem>().HasData(
+            new
+            {
+                Id = 1,
+                TrackId = 1,
+                CartId = 1,
+                Quantity = 1
+            }
+            );
         modelBuilder.Entity<Order>().HasData(
             new
             {

@@ -2,14 +2,15 @@
 
 namespace Core.Entities;
 
-public class Order : BaseEntity
+public class Cart : BaseEntity
 {
-
     public DateTime OrderDate { get; set; }
     
     public decimal Subtotal { get; set; }
     
     public string Comment { get; set; }
+    
+    public string Address { get; set; }
     
     public string PaymentMethod { get; set; }
     
@@ -21,9 +22,6 @@ public class Order : BaseEntity
     
     public virtual User User { get; set; }
     
-    
-    
-    //public virtual CustomerBasket CustomerBasket { get; set; }
 
     public List<CartItem> CartItems = new List<CartItem>();
 }

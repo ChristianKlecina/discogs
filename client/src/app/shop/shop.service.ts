@@ -6,6 +6,7 @@ import {IMedium} from "../shared/models/medium";
 import {map} from "rxjs";
 import {ShopParams} from "../shared/models/shopParams";
 import {ITrack} from "../shared/models/track";
+import {BasketService} from "../basket/basket.service";
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ export class ShopService {
 
   baseUrl = 'https://localhost:1296/api/'
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private cartService: BasketService) { }
 
   getProducts(shopParams: ShopParams){
     let params = new HttpParams();
@@ -54,5 +55,10 @@ export class ShopService {
 
   getMediums(){
     return this.http.get<IMedium[]>(this.baseUrl+'track/medium')
+  }
+
+  addToCart(track: any){
+    this.cartService.addToCart(track);
+
   }
 }

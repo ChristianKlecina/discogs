@@ -33,7 +33,7 @@ public class OrderController : BaseApiController
                     Comment = orderDto.Comment,
                     PaymentMethod = orderDto.PaymentMethod,
                     Payment = orderDto.Payment,
-                    CustomerBasket = _basketRepo.GetBasketAsync(orderDto.CustomerBasketId).Result,
+                    //CustomerBasket = _basketRepo.GetBasketAsync(orderDto.CustomerBasketId).Result,
                     Subtotal = SubtotalCount(_basketRepo.GetBasketAsync(orderDto.CustomerBasketId).Result),
                     User = _userRepo.GetUserById(orderDto.UserId)
                     

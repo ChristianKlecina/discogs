@@ -20,5 +20,8 @@ public class MappingProfiles : Profile
         CreateMap<TrackToReturnDto, Track>()
             .ForMember(x => x.Genre, o => o.MapFrom(p => p.Genre));
         CreateMap<Track, Track>();
+
+        CreateMap<Cart, CartDto>().ReverseMap();
+        CreateMap<CartItem, CartItemDto>().ReverseMap();
     }
 }
