@@ -4,7 +4,7 @@ namespace Core.Interfaces;
 
 public interface ICartRepository
 {
-    Task<Cart> GetCartByUserId(int Id);
+    
 
     Task<Cart> GetCartById(int id);
     

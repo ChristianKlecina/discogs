@@ -16,12 +16,12 @@ public class Cart : BaseEntity
     
     public bool Payment { get; set; }
     
+    public string City { get; set; }
     
-    [ForeignKey("Id")]
-    public int UserId { get; set; }
+    public string FirstName { get; set; }
     
-    public virtual User User { get; set; }
-    
+    public string LastName { get; set; }
 
-    public List<CartItem> CartItems = new List<CartItem>();
+
+    public virtual IEnumerable<CartItem> CartItems { get; set; }
 }

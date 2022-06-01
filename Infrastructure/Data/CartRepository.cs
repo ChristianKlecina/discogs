@@ -15,16 +15,11 @@ public class CartRepository : ICartRepository
     }
 
 
-    public async Task<Cart> GetCartByUserId(int Id)
-    {
-        var cart = await _context.Cart.FirstOrDefaultAsync(u => u.UserId == Id);
-        
-        return cart ;
-    }
+    
 
     public async Task<Cart> GetCartById(int id)
     {
-        var cart = await _context.Cart.FirstOrDefaultAsync(u => u.Id == id);
+        var cart = await _context.Cart.Where(x=> x.Id == id).FirstOrDefaultAsync(u => u.Id == id);
         
         return cart ; 
     }

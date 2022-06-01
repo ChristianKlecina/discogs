@@ -19,8 +19,10 @@ public class CartDto
     
     public string Address { get; set; }
     
-    [ForeignKey("Id")]
-    public int UserId { get; set; }
-
-    public List<CartItemDto> CartItems = new List<CartItemDto>();
+    public string City { get; set; }
+    
+    public string FirstName { get; set; }
+    
+    public string LastName { get; set; }
+    public virtual IEnumerable<CartItemDto> CartItems { get; set; }
 }

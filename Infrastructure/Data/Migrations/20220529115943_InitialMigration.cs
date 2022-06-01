@@ -14,6 +14,27 @@ namespace Infrastructure.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Cart",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Subtotal = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Comment = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PaymentMethod = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Payment = table.Column<bool>(type: "bit", nullable: false),
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Cart", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Genre",
                 columns: table => new
                 {
@@ -156,31 +177,6 @@ namespace Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Cart",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Subtotal = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Comment = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PaymentMethod = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Payment = table.Column<bool>(type: "bit", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Cart", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Cart_User_UserId",
-                        column: x => x.UserId,
-                        principalTable: "User",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Order",
                 columns: table => new
                 {
@@ -232,6 +228,11 @@ namespace Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Cart",
+                columns: new[] { "Id", "Address", "City", "Comment", "FirstName", "LastName", "OrderDate", "Payment", "PaymentMethod", "Subtotal" },
+                values: new object[] { 1, "Vojvodjanska 71", "Indjija", "", "Kristian", "Klecina", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false, "", 14.52m });
+
+            migrationBuilder.InsertData(
                 table: "Genre",
                 columns: new[] { "Id", "GenreName" },
                 values: new object[,]
@@ -280,11 +281,6 @@ namespace Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Cart",
-                columns: new[] { "Id", "Address", "Comment", "OrderDate", "Payment", "PaymentMethod", "Subtotal", "UserId" },
-                values: new object[] { 1, "Vojvodjanska 71, Indjija", "", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false, "", 14.52m, 1 });
-
-            migrationBuilder.InsertData(
                 table: "Order",
                 columns: new[] { "Id", "Comment", "OrderDate", "Payment", "PaymentMethod", "Subtotal", "UserId" },
                 values: new object[] { 1, "", new DateTime(2022, 4, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), false, "On recieve", 10.23m, 2 });
@@ -304,11 +300,6 @@ namespace Infrastructure.Data.Migrations
                 table: "CartItem",
                 columns: new[] { "Id", "CartId", "Quantity", "TrackId" },
                 values: new object[] { 1, 1, 1, 1 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Cart_UserId",
-                table: "Cart",
-                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CartItem_CartId",

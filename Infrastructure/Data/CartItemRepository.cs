@@ -20,7 +20,7 @@ public class CartItemRepository : ICartItemRepository
 
     public async Task<IReadOnlyList<CartItem>> GetCartItemsByCartId(int cartId)
     {
-        return await _context.CartItem.Where(x => x.CartId == cartId).ToListAsync();
+        return await _context.CartItem.ToListAsync();
     }
 
     public async Task<CartItem> CreateCartItem(CartItem cartItem)

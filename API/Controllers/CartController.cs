@@ -14,23 +14,24 @@ public class CartController : BaseApiController
     private readonly ICartRepository _cartRepository;
     private readonly IMapper _mapper;
     private readonly IUserRepository _usersRepository;
+    private readonly ICartItemRepository _cartItemRepository;
 
-    public CartController(ICartRepository cartRepository, IMapper mapper, IUserRepository usersRepository)
+    public CartController(ICartRepository cartRepository, IMapper mapper, IUserRepository usersRepository, ICartItemRepository cartItemRepository)
     {
         _cartRepository = cartRepository;
         _mapper = mapper;
         _usersRepository = usersRepository;
+        _cartItemRepository = cartItemRepository;
     }
-    
-    [HttpGet("{id}")]
-    public async Task<ActionResult<CartDto>> GetBasketById(int Id)
-    {
-        var cart = await _cartRepository.GetCartByUserId(Id);
-        var mappedCart = _mapper.Map<Cart, CartDto>(cart);
 
-        return Ok(mappedCart);
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Cart>> GetCartById(int id)
+    {
+        var cart = await _cartRepository.GetCartById(id);
+        //return _mapper.Map<Cart, CartDto>(cart);
+        return cart;
     }
-    
+
     [HttpPost]
     public async Task<ActionResult<Cart>> CreateCart(CartDto cartDto)
     {
@@ -38,20 +39,33 @@ public class CartController : BaseApiController
         {
             var cart = new Cart
             {
-                Id = cartDto.Id,
                 OrderDate = cartDto.OrderDate,
-                UserId = cartDto.UserId,
-                User = _usersRepository.GetUserById(cartDto.UserId),
+                FirstName = cartDto.FirstName,
+                LastName = cartDto.LastName,
+                City = cartDto.City,
                 Address = cartDto.Address,
                 Comment = cartDto.Comment,
                 Payment = cartDto.Payment,
                 Subtotal = cartDto.Subtotal,
                 PaymentMethod = cartDto.PaymentMethod
-            
             };
 
             _cartRepository.CreateCart(cart);
+            //Console.WriteLine(cartDto.CartItems);
+            foreach (var item in cartDto.CartItems)
+            {
+                
+                
+                CartItemDto cartItemDto = new CartItemDto();
+                cartItemDto.CartId = cart.Id;
+                cartItemDto.Quantity = item.Quantity;
+                cartItemDto.TrackId = item.TrackId;
+                _cartItemRepository.CreateCartItem(_mapper.Map<CartItemDto,CartItem>(cartItemDto));
+                
+            }
 
+            
+            
             return Ok(cart);
         }
         catch (Exception e)

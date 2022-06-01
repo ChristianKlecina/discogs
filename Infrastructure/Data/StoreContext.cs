@@ -225,10 +225,12 @@ public class StoreContext : DbContext
                 OrderDate = new DateTime(),
                 Subtotal = 14.52M,
                 Comment = "",
-                Address = "Vojvodjanska 71, Indjija",
+                Address = "Vojvodjanska 71",
                 PaymentMethod = "",
                 Payment = false,
-                UserId = 1
+                City = "Indjija",
+                FirstName = "Kristian",
+                LastName = "Klecina"
             }
             );
         modelBuilder.Entity<CartItem>().HasData(
