@@ -10,6 +10,12 @@ import {CoreModule} from "./core/core.module";
 import {ShopModule} from "./shop/shop.module";
 import {HomeModule} from "./home/home.module";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {JwtModule} from "@auth0/angular-jwt";
+
+
+export function tokenGetter(){
+  return localStorage.getItem('jwt')
+}
 
 @NgModule({
   declarations: [
@@ -17,13 +23,20 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
   ],
   imports: [
     BrowserModule,
+
     AppRoutingModule,
     CoreModule,
+
     BrowserAnimationsModule,
     HttpClientModule,
     HomeModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokenGetter
+      }
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]

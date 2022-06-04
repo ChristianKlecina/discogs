@@ -31,6 +31,15 @@ public class CartController : BaseApiController
         //return _mapper.Map<Cart, CartDto>(cart);
         return cart;
     }
+    
+    
+    [HttpGet()]
+    public async Task<ActionResult<IReadOnlyList<Cart>>> GetCarts()
+    {
+        var cart = await _cartRepository.GetCarts();
+        //return _mapper.Map<Cart, CartDto>(cart);
+        return cart;
+    }
 
     [HttpPost]
     public async Task<ActionResult<Cart>> CreateCart(CartDto cartDto)

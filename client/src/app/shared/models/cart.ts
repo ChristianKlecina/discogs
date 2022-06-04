@@ -1,7 +1,7 @@
 import {CartItem} from "./cartitem";
 
 export class Cart{
-
+  id: number
   orderDate = new Date();
   subtotal: number;
   comment: string;

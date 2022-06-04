@@ -4,6 +4,7 @@ import {CartItem} from "../shared/models/cartitem";
 import {HttpClient} from "@angular/common/http";
 import {FormGroup} from "@angular/forms";
 import {Cart} from "../shared/models/cart";
+import {MatDialog} from "@angular/material/dialog";
 
 
 @Injectable({
@@ -19,7 +20,7 @@ export class BasketService {
   baseUrl = 'https://localhost:1296/api/'
   public trackList = new BehaviorSubject<any>([]);
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient, private mat: MatDialog) { }
 
   getTracksCart(){
     return this.trackList.asObservable();
@@ -57,6 +58,7 @@ export class BasketService {
 
   removeAllCart(){
     this.cartItemList = []
+    this.cartItems = []
     this.trackList.next(this.cartItemList)
   }
 
@@ -93,7 +95,8 @@ export class BasketService {
     this.httpClient.post<Cart>('https://localhost:1296/api/cart', this.cart).subscribe(data => {
       console.log(data)
     });
-
+    this.removeAllCart()
+    this.mat.closeAll()
 
   }
 

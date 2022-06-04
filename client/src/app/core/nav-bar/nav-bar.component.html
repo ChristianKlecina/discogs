@@ -3,15 +3,16 @@
   <nav class="my-2 my-md-0 mr-md-3 text-uppercase" style="font-size: larger">
     <a class="p-2 " [routerLink]="['/']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" >Home</a>
     <a class="p-2 " routerLink="/shop" routerLinkActive="active">Shop</a>
-    <a class="p-2 " >Errors</a>
+    <a class="p-2 " routerLink="/admin" *ngIf="logRole=== 'Admin'">Admin Panel</a>
   </nav>
   <div class="d-flex align-items-center">
     <a routerLink="/basket" class="position-relative">
       <i class="fa fa-shopping-cart fa-2x mr-5 text-dark"></i>
       <div class="cart-no">{{totalItem}}</div>
     </a>
-    <a class="btn btn-outline-secondary mr-2" >Login</a>
-    <a class="btn btn-outline-secondary mr-3" >Sign up</a>
+    <a class="btn btn-outline-secondary mr-2" (click)="openLoginDialog();" *ngIf="logRole === ''" >Login</a>
+    <a class="btn btn-outline-secondary mr-2"  *ngIf="this.logRole != ''" (click)="logout()">Logout</a>
+    <a class="btn btn-outline-secondary mr-3" *ngIf="logRole === ''" (click)="openRegisterDialog()" >Sign up</a>
   </div>
 
 </div>

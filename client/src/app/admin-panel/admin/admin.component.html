@@ -1,0 +1,85 @@
+<h3>Genres</h3>
+<div class="container">
+  <div class="card-table">
+    <div class="cart-product">
+      <table class="table table-responsive">
+        <thead>
+        <tr>
+          <th>Id</th>
+          <th>Name</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let genre of this.genres">
+          <td>{{genre.id}}</td>
+          <td>{{genre.genreName}}</td>
+          <td>
+            <button class="btn btn-danger" (click)="deleteGenre(genre)"><i class="fa fa-trash"></i></button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <button class="btn btn-primary" (click)="insertGenre()">Add Genre</button>
+  <h3>Mediums</h3>
+  <div class="container">
+    <div class="card-table">
+      <div class="cart-product">
+        <table class="table table-responsive">
+          <thead>
+          <tr>
+            <th>Id</th>
+            <th>Name</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let medium of this.mediums">
+            <td>{{medium.id}}</td>
+            <td>{{medium.mediumName}}</td>
+            <td>
+              <button class="btn btn-danger" ><i class="fa fa-trash"></i></button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <h3>Tracks</h3>
+    <h3>Labels</h3>
+    <h3>Producers</h3>
+    <h3>Carts</h3>
+    <div class="container">
+      <div class="card-table">
+        <div class="cart-product">
+          <table class="table table-responsive">
+            <thead>
+            <tr>
+              <th>Id</th>
+              <th>Name</th>
+              <th>Lastname</th>
+              <th>Address</th>
+              <th>City</th>
+              <th>Payment method</th>
+              <th>Tracks</th>
+            </tr>
+            </thead>
+            <tbody>
+            <ng-container *ngFor="let cart of this.cart">
+              <td>{{cart.id}}</td>
+              <td>{{cart.firstName}}</td>
+              <td>{{cart.lastName}}</td>
+              <td>{{cart.address}}</td>
+              <td>{{cart.city}}</td>
+              <td>{{cart.paymentMethod}}</td>
+              <tr *ngFor="let track of this.cart.cartItems">tracks:{{track.trackId}}</tr>
+              <td>
+                <button class="btn btn-danger" ><i class="fa fa-trash"></i></button>
+              </td>
+            </ng-container>
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <h3>Users</h3>
