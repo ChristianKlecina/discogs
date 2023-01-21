@@ -14,6 +14,10 @@ public interface IUserRepository
     public Task<User> UpdateUser (User user);
 
     public User GetUserById(int id);
+    
+    public bool GetUserByEmail(string email);
+
+    public Task<IReadOnlyList<User>> ListAllAsync();
 
     public bool SaveChanges();
 }

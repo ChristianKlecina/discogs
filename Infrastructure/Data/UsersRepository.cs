@@ -56,6 +56,21 @@ public class UsersRepository : IUserRepository
         return user;
     }
 
+    public bool GetUserByEmail(string email)
+    {
+        var user = _context.User.FirstOrDefault(x => x.Email == email);
+        if (user != null)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public async Task<IReadOnlyList<User>> ListAllAsync()
+    {
+        return await _context.User.ToListAsync();
+    }
+
     public bool SaveChanges()
     {
         return _context.SaveChanges() > 0;

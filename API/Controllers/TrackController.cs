@@ -201,7 +201,13 @@ public class TrackController : BaseApiController
         catch (Exception e)
         {
             Console.WriteLine(e);
-            throw;
+            return BadRequest(new ErrorResponse
+            {
+                ErrorMessage = new ErrorMessage
+                {
+                    Message = e.Message
+                }
+            });
         }
     }
     
@@ -240,9 +246,29 @@ public class TrackController : BaseApiController
     }
     
     [HttpGet("producer/{id}")]
-    public async Task<ActionResult<Label>> GetProducer(int id)
+    public async Task<ActionResult<Producer>> GetProducer(int id)
     {
         return Ok(await _producerRepo.GetByIdAsync(id));
+    } 
+    
+    [HttpGet("producer")]
+    public async Task<ActionResult<IReadOnlyList<Producer>>> GetProducers()
+    {
+        return Ok(await _producerRepo.ListAllAsync());
+    } 
+    
+    [HttpGet("label")]
+    public async Task<ActionResult<IReadOnlyList<Label>>> GetLabels()
+    {
+        return Ok(await _labelRepo.ListAllAsync());
+    } 
+
+    [HttpGet("trackall")]
+    public async Task<ActionResult<IReadOnlyList<TrackToReturnDto>>> GetTracksAll()
+    {
+        var track = await _trackRepo.ListAllAsync();
+        return Ok(_mapper.Map<IReadOnlyList<Track>,IReadOnlyList<TrackToReturnDto>>(track));
+       
     } 
     
     [Authorize(Roles = "Admin")]

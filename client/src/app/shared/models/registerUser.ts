@@ -7,5 +7,4 @@ export class RegisterUser{
   password: string;
   city: string;
   country: string;
-  role = 'User'
 }

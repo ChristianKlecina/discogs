@@ -25,14 +25,23 @@ public class LoginController : BaseApiController
     [AllowAnonymous]
     [HttpPost]
     
-    public IActionResult Login([FromBody] UserLoginDto userLogin)
+    public ActionResult<PersistedUserDto> Login([FromBody] UserLoginDto userLogin)
     {
         
         var user = Authenticate(userLogin);
         if (user != null)
         {
             var token = Generate(user);
-            return Ok(token);
+
+            PersistedUserDto persistedUserDto = new PersistedUserDto
+            {
+                Email = userLogin.Email,
+                Name = user.Name,
+                Token = token.ToString()
+            };
+            
+            
+            return Ok(persistedUserDto);
         }
 
         return NotFound("User not found");
@@ -57,7 +66,7 @@ public class LoginController : BaseApiController
             expires: DateTime.Now.AddDays(30),
             signingCredentials: credentials);
         var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
-        return Ok(new { Token = tokenString }.Token);
+        return new { Token = tokenString }.Token;
     }
 
     private User Authenticate(UserLoginDto userLogin)

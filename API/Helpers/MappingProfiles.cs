@@ -15,7 +15,7 @@ public class MappingProfiles : Profile
             .ForMember(x => x.Label, o =>o.MapFrom(s => s.Label.Name))
             .ForMember(x => x.Genre, o =>o.MapFrom(s => s.Genre.GenreName));
 
-        CreateMap<AdminRegisterDto, User>();
+        CreateMap<AdminRegisterDto, User>().ReverseMap();
         CreateMap<User, User>();
         CreateMap<TrackToReturnDto, Track>()
             .ForMember(x => x.Genre, o => o.MapFrom(p => p.Genre));

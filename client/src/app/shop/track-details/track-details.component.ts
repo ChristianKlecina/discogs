@@ -26,4 +26,8 @@ export class TrackDetailsComponent implements OnInit {
       console.log(error)
     })
   }
+
+  addToCart(track: ITrack) {
+    this.shopService.addToCart(track);
+  }
 }

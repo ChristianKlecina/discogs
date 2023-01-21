@@ -1,5 +1,8 @@
 ﻿using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
 using API.Dtos;
+using API.Errors;
 using AutoMapper;
 using Core.Entities;
 using Core.Interfaces;
@@ -13,12 +16,14 @@ public class UserController : BaseApiController
 {
     private readonly IUserRepository _userRepo;
     private readonly IMapper _mapper;
+    private readonly StoreContext _context;
 
 
-    public UserController(IUserRepository userRepo, IMapper mapper)
+    public UserController(IUserRepository userRepo, IMapper mapper, StoreContext context)
     {
         _userRepo = userRepo;
         _mapper = mapper;
+        _context = context;
     }
 
     [HttpGet]
@@ -28,8 +33,20 @@ public class UserController : BaseApiController
         return Ok(currentUser);
     }
 
+    [HttpGet]
+    private bool GetUserByEmail(String email)
+    {
+        bool exists = _userRepo.GetUserByEmail(email);
+        if (exists)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     [HttpPost("admin")]
-    public IActionResult AdminRegister([FromBody]AdminRegisterDto adminDto)
+    public ActionResult AdminRegister([FromBody]AdminRegisterDto adminDto)
     {
         if (adminDto != null)
         {
@@ -45,38 +62,50 @@ public class UserController : BaseApiController
                 Email = adminDto.Email,
                 Password = adminDto.Password
             };
-            _userRepo.Register(user);
-            return Ok(user);
+
+            if (!GetUserByEmail(adminDto.Email))
+            {
+                var user2 = _mapper.Map<User>(adminDto);
+                Console.WriteLine(user2);
+                //_userRepo.Register(user);
+                _context.Add(user2);
+            
+                _context.SaveChanges();
+                return Ok(user2);
+            }
+
+            
+
+
         }
 
-        return BadRequest();
+        return Conflict(new ApiResponse(409));
     }
     
     [HttpPost("user")]
-    public IActionResult UserRegister([FromBody]UserRegisterDto userDto)
+    public ActionResult UserRegister([FromBody]UserRegisterDto userDto)
     {
         if (userDto != null)
         {
-            var user = new User
-            {
-                Name = userDto.Name,
-                Lastname = userDto.Lastname,
-                Role = userDto.Role,
-                Address = userDto.Address,
-                City = userDto.City,
-                Country = userDto.Country,
-                Telephone = userDto.Telephone,
-                Email = userDto.Email,
-                Password = userDto.Password
-            };
+            
+            
 
-            //return Ok(_userRepo.Register(user));
-            _userRepo.Register(user);
-            return Ok(user);
+            if (!GetUserByEmail(userDto.Email))
+            {
+                var user2 = _mapper.Map<User>(userDto);
+                Console.WriteLine(user2);
+                //_userRepo.Register(user);
+                _context.Add(user2);
+            
+                _context.SaveChanges();
+                return Ok(user2);
+            }
         }
         
-            return BadRequest();
+            return Conflict(new ApiResponse(409));
     }
+
+    
 
     [HttpDelete("{Id}")]
     public IActionResult DeleteUser(int id)
@@ -116,15 +145,23 @@ public class UserController : BaseApiController
     }
 
     [HttpGet("{Id}")]
-    public IActionResult GetUser(int id)
+    public async Task<ActionResult<User>> GetUser(int id)
     {
         if (id != null)
         {
             var user = _userRepo.GetUserById(id);
-            return Ok(user);
+            return Ok( user);
         }
 
         return NoContent();
+    }
+    
+    [HttpGet("user")]
+    public async Task<ActionResult<IReadOnlyList<User>>> GetUsers()
+    {
+        
+
+        return Ok(await _userRepo.ListAllAsync());
     }
     
     
@@ -146,6 +183,15 @@ public class UserController : BaseApiController
         }
 
         return null;
+    }
+
+    //Ovu metodu za sada nećeš koristiti
+    private string HashPassword(string password)
+    {
+        SHA512 hash = SHA512.Create();
+        var passwordBytes = Encoding.Default.GetBytes(password);
+        var hahsedpassword = hash.ComputeHash(passwordBytes);
+        return Convert.ToHexString(hahsedpassword);
     }
     
 }

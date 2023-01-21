@@ -3,8 +3,10 @@
     <h2>Insert genre</h2>
 
     <br>
-    <label for="genre" class="sr-only">Genre</label>
-    <input type="genre" id="genre" name="genre" ngModel class="form-control" placeholder="Genre" required autofocus>
-    <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
+    <label  class="sr-only">Genre</label>
+    <input type="text" id="genre" name="genre" ngModel #name="ngModel" class="form-control" placeholder="Genre" required autofocus>
+    <span class="text-danger" *ngIf="name.touched && name.invalid">Insert Genre</span>
+    <hr>
+    <button class="btn btn-lg btn-primary btn-block" type="submit" [disabled]="genreform.invalid">Submit</button>
   </div>
 </form>

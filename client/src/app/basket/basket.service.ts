@@ -5,7 +5,9 @@ import {HttpClient} from "@angular/common/http";
 import {FormGroup} from "@angular/forms";
 import {Cart} from "../shared/models/cart";
 import {MatDialog} from "@angular/material/dialog";
+import {ISession} from "../shared/models/session";
 
+declare const Stripe;
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +21,8 @@ export class BasketService {
 
   baseUrl = 'https://localhost:1296/api/'
   public trackList = new BehaviorSubject<any>([]);
+
+  loggedIn = localStorage.getItem('role');
 
   constructor(private httpClient: HttpClient, private mat: MatDialog) { }
 
@@ -98,6 +102,22 @@ export class BasketService {
     this.removeAllCart()
     this.mat.closeAll()
 
+    this.requestMemberSession('price_1L7IopCHLmgQslOwmbPcPisI')
+
   }
 
+  requestMemberSession(priceId: string){
+    this.httpClient.post<ISession>('https://localhost:1296/api/payment/create-checkout-session',{
+      priceId: priceId,
+    }).subscribe((session) => {
+      this.redirectToCheckout(session);
+    });
+  }
+
+  redirectToCheckout(session: ISession){
+    const stripe = Stripe(session.publicKey)
+    stripe.redirectToCheckout({
+      sessionId: session.sessionId,
+    })
+  }
 }

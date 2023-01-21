@@ -15,13 +15,16 @@ public class CartController : BaseApiController
     private readonly IMapper _mapper;
     private readonly IUserRepository _usersRepository;
     private readonly ICartItemRepository _cartItemRepository;
+    private readonly IGenericRepository<Track> _trackRepository;
 
-    public CartController(ICartRepository cartRepository, IMapper mapper, IUserRepository usersRepository, ICartItemRepository cartItemRepository)
+    public CartController(ICartRepository cartRepository, IMapper mapper, IUserRepository usersRepository, ICartItemRepository cartItemRepository, 
+        IGenericRepository<Track> trackRepository)
     {
         _cartRepository = cartRepository;
         _mapper = mapper;
         _usersRepository = usersRepository;
         _cartItemRepository = cartItemRepository;
+        _trackRepository = trackRepository;
     }
 
     [HttpGet("{id}")]
@@ -44,6 +47,16 @@ public class CartController : BaseApiController
     [HttpPost]
     public async Task<ActionResult<Cart>> CreateCart(CartDto cartDto)
     {
+        decimal subtotal = 0;
+        
+
+        foreach (var item in cartDto.CartItems)
+        {
+            var track = _trackRepository.GetByIdAsync(item.TrackId);
+            subtotal += (track.Result.Price*item.Quantity);
+        }
+        
+        
         try
         {
             var cart = new Cart
@@ -55,7 +68,7 @@ public class CartController : BaseApiController
                 Address = cartDto.Address,
                 Comment = cartDto.Comment,
                 Payment = cartDto.Payment,
-                Subtotal = cartDto.Subtotal,
+                Subtotal = subtotal,
                 PaymentMethod = cartDto.PaymentMethod
             };
 

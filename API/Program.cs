@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 using API.Errors;
 using API.Helpers;
 using API.Middleware;
+using Core.Entities;
 using Core.Interfaces;
 using Infrastructure.Data;
 
@@ -12,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 using Microsoft.IdentityModel.Tokens;
 using StackExchange.Redis;
+using Stripe;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -58,6 +60,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(MappingProfiles));
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("StripeSettings"));
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
     options.TokenValidationParameters = new TokenValidationParameters
@@ -78,6 +81,7 @@ builder.Services.AddCors(option =>
         policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200");
     });
 });
+StripeConfiguration.ApiKey = builder.Configuration.GetValue<string>("StripeSettings:PrivateKey");
 
 var app = builder.Build();
 using (var scope = app.Services.CreateScope())

@@ -3,6 +3,9 @@ import {HttpClient} from "@angular/common/http";
 import {UserLogin} from "../shared/models/userLogin";
 import {MatDialog} from "@angular/material/dialog";
 import {Router} from "@angular/router";
+import {RegisterUser} from "../shared/models/registerUser";
+import {BehaviorSubject, Observable} from "rxjs";
+import {IPersistedUser} from "../shared/models/persistedUser";
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +13,9 @@ import {Router} from "@angular/router";
 export class LoggingService {
 
   invalidLogin: boolean
+  private currentUserSource = new BehaviorSubject<IPersistedUser>(null);
+  currentUser$ = this.currentUserSource.asObservable();
+
 
 
 
@@ -19,9 +25,11 @@ export class LoggingService {
   login(user: UserLogin){
 
 
-    this.httpClient.post("https://localhost:1296/api/login", user).subscribe(response => {
-      const token = (<any> response).value;
+    this.httpClient.post("https://localhost:1296/api/login", user).subscribe((response:IPersistedUser) => {
 
+      this.currentUserSource.next(response)
+      //const token = (<any> response).token;
+      const token = this.currentUserSource.getValue().token
       localStorage.setItem("jwt",token);
       console.log(localStorage.getItem('jwt'))
 
@@ -34,9 +42,13 @@ export class LoggingService {
       this.router.navigateByUrl('/shop')
 
       location.reload()
-      console.log(localStorage.getItem('role'))
+
+      // console.log(localStorage.getItem('role'))
+      // console.log(localStorage.getItem('jwt'))
+      // console.log(localStorage.getItem('jwt'))
     }, error => {
       this.invalidLogin = true;
+
       console.log(error)
 
     })
@@ -44,10 +56,24 @@ export class LoggingService {
 
   logout(){
     localStorage.removeItem('role');
+    localStorage.removeItem('jwt');
     this.router.navigateByUrl('/home')
-    //location.reload()
+    location.reload()
 
     console.log(localStorage.getItem('role'))
+  }
+
+  registerUser(user: RegisterUser){
+    console.log(user)
+
+    this.httpClient.post("https://localhost:1296/api/user/user", user).subscribe(res => {
+      console.log(res)
+    }, error => {
+      console.log(error)
+    })
+
+
+    this.mat.closeAll()
   }
 
 }

@@ -16,6 +16,7 @@ import { RegisterDialogComponent } from './register-dialog/register-dialog.compo
     RouterModule,
     MatDialogModule,
     FormsModule,
+
   ],
   exports: [NavBarComponent,LoginDialogComponent],
   providers: [

@@ -19,8 +19,11 @@ public class ApiResponse
         return statusCode switch
         {
             400 => "A bad request you have made",
+            405 => "Bad route",
             401 => "Authorized you are not",
             404 => "Resource found, it was not",
+            409 => "User already exists",
+            415 => "No body",
             500 =>
                 "Errors are the path to the dark side. Error leads to anger. Anger leads to hate. Hate leads to career change",
             _ => null

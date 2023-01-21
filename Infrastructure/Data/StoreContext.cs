@@ -255,7 +255,7 @@ public class StoreContext : DbContext
                 
             }
             );
-        
+        modelBuilder.Entity<CartItem>().ToTable(tb => tb.HasTrigger("dbo.cartitem_quantity_tr"));
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
     }
     

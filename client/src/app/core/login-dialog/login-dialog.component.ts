@@ -1,6 +1,6 @@
 import {Component, Injectable, OnInit, Output} from '@angular/core';
 import {NgForm} from "@angular/forms";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpInterceptor} from "@angular/common/http";
 import {UserLogin} from "../../shared/models/userLogin";
 import {Cart} from "../../shared/models/cart";
 import {MatDialog} from "@angular/material/dialog";
@@ -20,12 +20,14 @@ export class LoginDialogComponent implements OnInit {
 
 
 
+
   public user : UserLogin = new UserLogin()
 
   constructor(private httpClient: HttpClient, private mat: MatDialog, private logService: LoggingService) { }
 
   ngOnInit(): void {
   }
+
 
   login(form: NgForm){
 
@@ -35,5 +37,6 @@ export class LoginDialogComponent implements OnInit {
     this.logService.login(this.user)
 
   }
+
 
 }

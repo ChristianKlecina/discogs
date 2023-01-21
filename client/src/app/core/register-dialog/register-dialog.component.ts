@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {NgForm} from "@angular/forms";
 import {RegisterUser} from "../../shared/models/registerUser";
+import {LoggingService} from "../logging.service";
 
 @Component({
   selector: 'app-register-dialog',
@@ -9,7 +10,7 @@ import {RegisterUser} from "../../shared/models/registerUser";
 })
 export class RegisterDialogComponent implements OnInit {
 
-  constructor() { }
+  constructor(private service: LoggingService) { }
 
   public user : RegisterUser = new RegisterUser()
 
@@ -24,7 +25,9 @@ export class RegisterDialogComponent implements OnInit {
     this.user.city = registerForm.value.city
     this.user.country = registerForm.value.country
     this.user.telephone = registerForm.value.telephone
+    this.user.address = registerForm.value.address
+    this.service.registerUser(this.user);
 
-    console.log(this.user)
+    //console.log(this.user)
   }
 }

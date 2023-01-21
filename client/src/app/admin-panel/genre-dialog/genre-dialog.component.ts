@@ -11,18 +11,13 @@ export class GenreDialogComponent implements OnInit {
 
   constructor(private panelService: PanelService) { }
 
-  genreName: ''
+  genreName: String
 
   ngOnInit(): void {
   }
 
 
   insertGenre(form: NgForm){
-
-
-
     this.panelService.insertGenre(this.genreName = form.value.genre)
-
-
   }
 }

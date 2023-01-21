@@ -1,4 +1,5 @@
 import {CartItem} from "./cartitem";
+import {MatTableDataSource} from "@angular/material/table";
 
 export class Cart{
   id: number
@@ -11,7 +12,7 @@ export class Cart{
   address: string;
   paymentMethod: string;
   payment: boolean;
-  cartItems : CartItem[]
+  cartItems? : CartItem[] | MatTableDataSource<CartItem>;
 }
 
 

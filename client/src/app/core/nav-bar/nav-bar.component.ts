@@ -27,15 +27,20 @@ export class NavBarComponent implements OnInit {
     this.cartService.getTracksCart().subscribe(response => {
       this.totalItem = response.length;
     })
+    console.log(localStorage.getItem('role'))
+    console.log(localStorage.getItem('jwt'))
+    //console.log(this.logRole)
     //localStorage.setItem("role", '')
   }
 
   openLoginDialog() {
+    this.matDialog.closeAll()
     this.matDialog.open(LoginDialogComponent)
     this.logRole = localStorage.getItem('role')
   }
 
   openRegisterDialog() {
+    this.matDialog.closeAll()
     let id =this.matDialog.open(RegisterDialogComponent).id
 
   }
