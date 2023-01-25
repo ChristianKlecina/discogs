@@ -37,7 +37,7 @@ public class StoreContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
         
-        
+        modelBuilder.Entity<CartItem>().ToTable(tb => tb.HasTrigger("dbo.cartitem_quantity_tr"));
         
         modelBuilder.Entity<Producer>().HasData(
             new
@@ -255,7 +255,7 @@ public class StoreContext : DbContext
                 
             }
             );
-        modelBuilder.Entity<CartItem>().ToTable(tb => tb.HasTrigger("dbo.cartitem_quantity_tr"));
+        
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
     }
     

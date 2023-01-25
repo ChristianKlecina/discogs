@@ -52,7 +52,14 @@ public class CartController : BaseApiController
 
         foreach (var item in cartDto.CartItems)
         {
+
+            
+            
             var track = _trackRepository.GetByIdAsync(item.TrackId);
+            if (track.Result.Quantity < item.Quantity)
+            {
+                return StatusCode(StatusCodes.Status409Conflict, "Product is out of stock");
+            }
             subtotal += (track.Result.Price*item.Quantity);
         }
         

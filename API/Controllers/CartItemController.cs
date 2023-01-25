@@ -2,6 +2,8 @@
 using AutoMapper;
 using Core.Entities;
 using Core.Interfaces;
+using EntityFrameworkCore.Triggers;
+using Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
@@ -51,7 +53,7 @@ public class CartItemController : BaseApiController
             
         };
         
-        return await _cartItemRepository.CreateCartItem(cartItem);
+        return  _cartItemRepository.CreateCartItemSync(cartItem);
         
         
     }

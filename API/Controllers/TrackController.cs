@@ -45,6 +45,13 @@ public class TrackController : BaseApiController
 
     }
 
+    [HttpGet("id/{id}")]
+    public ActionResult<Track> GetTrackById(int id)
+    {
+        var track = _trackRepo.GetById(id);
+        return track;
+    }
+
     [HttpGet]
     public async Task<ActionResult<Pagination<TrackToReturnDto>>> GetTracks([FromQuery]TrackSpecParams trackParams)
     {

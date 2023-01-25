@@ -1,6 +1,7 @@
 ﻿using Core.Entities;
 using Core.Interfaces;
 using Core.Specifications;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data;
@@ -25,6 +26,12 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
     {
         return await _context.Set<T>().ToListAsync();
     }
+
+    public ActionResult<T> GetById(int id)
+    {
+        return _context.Set<T>().Find(id);
+    }
+
 
     public async Task<T> GetEntityWithSpec(ISpecification<T> spec)
     {

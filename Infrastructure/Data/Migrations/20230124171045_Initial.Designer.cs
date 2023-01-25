@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20220529115943_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20230124171045_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -109,7 +109,10 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasIndex("TrackId");
 
-                    b.ToTable("CartItem");
+                    b.ToTable("CartItem", t =>
+                    {
+                        t.HasTrigger("dbo.cartitem_quantity_tr");
+                    });
 
                     b.HasData(
                         new

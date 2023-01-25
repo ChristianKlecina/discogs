@@ -34,8 +34,8 @@ public class CartRepository : ICartRepository
     {
         if (cart != null)
         {
-            await _context.Cart.AddAsync(cart);
-            _context.SaveChanges();
+             _context.Cart.Add(cart);
+             _context.SaveChanges();
 
         }
         

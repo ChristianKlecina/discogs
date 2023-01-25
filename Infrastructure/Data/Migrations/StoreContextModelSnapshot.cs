@@ -106,7 +106,10 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasIndex("TrackId");
 
-                    b.ToTable("CartItem");
+                    b.ToTable("CartItem", t =>
+                    {
+                        t.HasTrigger("dbo.cartitem_quantity_tr");
+                    });
 
                     b.HasData(
                         new
