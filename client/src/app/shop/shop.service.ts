@@ -13,7 +13,7 @@ import {BasketService} from "../basket/basket.service";
 })
 export class ShopService {
 
-  baseUrl = 'https://localhost:1296/api/'
+  baseUrl = 'http://localhost:1296/api/'
 
   constructor(private http: HttpClient, private cartService: BasketService) { }
 

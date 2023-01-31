@@ -3,6 +3,6 @@ export class ShopParams{
   mediumId = 0;
   sort = 'name';
   pageNumber = 1
-  pageSize = 2
+  pageSize = 8
   search: string;
 }

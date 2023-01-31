@@ -92,27 +92,8 @@ public class TrackController : BaseApiController
             {
 
 
-                var track = new Track
-                {
-                    TrackName = trackDto.TrackName,
-                    Price = trackDto.Price,
-                    Duration = trackDto.Duration,
-                    PublishDate = trackDto.PublishDate,
-                    PictureUrl = trackDto.PictureUrl,
-                    Quantity = trackDto.Quantity,
-                    GenreId = trackDto.GenreId,
-                    Genre = _genresRepo.GetByIdAsync(trackDto.GenreId).Result,
-                    MediumId = trackDto.MediumId,
-                    Medium = _mediumRepo.GetByIdAsync(trackDto.MediumId).Result,
-                    ProducerId = trackDto.ProducerId,
-                    Producer = _producerRepo.GetByIdAsync(trackDto.ProducerId).Result,
-                    LabelId = trackDto.LabelId,
-                    Label = _labelRepo.GetByIdAsync(trackDto.LabelId).Result,
-
-                };
                 
-                _trackRepo.CreateAsync(track);
-                return Ok(track);
+                return Ok(await _trackRepo.CreateAsync(_mapper.Map<Track>(trackDto)));
             }
 
             return NoContent();

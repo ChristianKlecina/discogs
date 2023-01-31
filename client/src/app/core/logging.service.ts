@@ -25,7 +25,7 @@ export class LoggingService {
   login(user: UserLogin){
 
 
-    this.httpClient.post("https://localhost:1296/api/login", user).subscribe((response:IPersistedUser) => {
+    this.httpClient.post("http://localhost:1296/api/login", user).subscribe((response:IPersistedUser) => {
 
       this.currentUserSource.next(response)
       //const token = (<any> response).token;
@@ -66,7 +66,7 @@ export class LoggingService {
   registerUser(user: RegisterUser){
     console.log(user)
 
-    this.httpClient.post("https://localhost:1296/api/user/user", user).subscribe(res => {
+    this.httpClient.post("http://localhost:1296/api/user/user", user).subscribe(res => {
       console.log(res)
     }, error => {
       console.log(error)

@@ -33,9 +33,9 @@ public class CartRepository : ICartRepository
     public async Task<Cart> CreateCart(Cart cart)
     {
         if (cart != null)
-        {
-             _context.Cart.Add(cart);
-             _context.SaveChanges();
+        { 
+            _context.Cart.Add(cart); 
+            _context.SaveChanges();
 
         }
         

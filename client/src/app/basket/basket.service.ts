@@ -9,6 +9,7 @@ import {ISession} from "../shared/models/session";
 
 declare const Stripe;
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -19,7 +20,7 @@ export class BasketService {
   public cart : Cart = new Cart()
   cartItems = [] as CartItem[]
 
-  baseUrl = 'https://localhost:1296/api/'
+  baseUrl = 'http://localhost:1296/api/'
   public trackList = new BehaviorSubject<any>([]);
 
   loggedIn = localStorage.getItem('role');
@@ -96,28 +97,48 @@ export class BasketService {
     this.cart.subtotal = this.getTotalPrice()
     console.log(this.cart)
 
-    this.httpClient.post<Cart>('https://localhost:1296/api/cart', this.cart).subscribe(data => {
-      console.log(data)
+    this.httpClient.post<Cart>('http://localhost:1296/api/cart', this.cart).subscribe(data => {
+      console.log(data.id)
+      this.requestMemberSession(data.id)
     });
     this.removeAllCart()
     this.mat.closeAll()
 
-    this.requestMemberSession('price_1L7IopCHLmgQslOwmbPcPisI')
+
 
   }
 
-  requestMemberSession(priceId: string){
-    this.httpClient.post<ISession>('https://localhost:1296/api/payment/create-checkout-session',{
-      priceId: priceId,
-    }).subscribe((session) => {
-      this.redirectToCheckout(session);
+  // requestMemberSession(priceId: string){
+  //   this.httpClient.post<ISession>('http://localhost:1296/api/payment/create-checkout-session',{
+  //     priceId: priceId,
+  //   }).subscribe((session) => {
+  //     this.redirectToCheckout(session);
+  //   });
+  // }
+
+  requestMemberSession(cartId: number){
+    console.log(cartId)
+    this.httpClient.post<ISession>('http://localhost:1296/api/payment/checkout/'+cartId,{}).subscribe((response) => {
+      //console.log(session)
+
+      this.toCheckout(response.publicKey, response.sessionId);
     });
   }
 
-  redirectToCheckout(session: ISession){
-    const stripe = Stripe(session.publicKey)
+  // toCheckout(session: ISession){
+  //   console.log(session)
+  //   console.log("toCheckout metoda")
+  //   const stripe = Stripe(session.publicKey)
+  //   console.log(stripe)
+  //   stripe.redirectToCheckout(session.sessionId)
+  // }
+
+  toCheckout(publicKey: String, sessionId :String){
+    console.log(sessionId)
+    console.log(publicKey)
+    const stripe = Stripe(publicKey)
     stripe.redirectToCheckout({
-      sessionId: session.sessionId,
+      sessionId: sessionId,
     })
   }
 }

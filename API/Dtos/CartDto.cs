@@ -24,5 +24,5 @@ public class CartDto
     public string FirstName { get; set; }
     
     public string LastName { get; set; }
-    public virtual IEnumerable<CartItemDto> CartItems { get; set; }
+    public virtual ICollection<CartItemDto> CartItems { get; set; } = new List<CartItemDto>();
 }

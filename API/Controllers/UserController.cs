@@ -50,18 +50,7 @@ public class UserController : BaseApiController
     {
         if (adminDto != null)
         {
-            var user = new User
-            {
-                Name = adminDto.Name,
-                Lastname = adminDto.Lastname,
-                Role = adminDto.Role,
-                Address = adminDto.Address,
-                City = adminDto.City,
-                Country = adminDto.Country,
-                Telephone = adminDto.Telephone,
-                Email = adminDto.Email,
-                Password = adminDto.Password
-            };
+            
 
             if (!GetUserByEmail(adminDto.Email))
             {

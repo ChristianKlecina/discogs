@@ -23,5 +23,5 @@ public class Cart : BaseEntity
     public string LastName { get; set; }
 
 
-    public virtual IEnumerable<CartItem> CartItems { get; set; }
+    public virtual ICollection<CartItem> CartItems { get; set; } = new List<CartItem>();
 }

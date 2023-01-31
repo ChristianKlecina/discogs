@@ -31,34 +31,34 @@ export class PanelService {
   }
 
   getGenres() {
-    return this.httpClient.get<IGenre[]>('https://localhost:1296/api/track/genre')
+    return this.httpClient.get<IGenre[]>('http://localhost:1296/api/track/genre')
   }
   getMediums() {
-    return this.httpClient.get<IMedium[]>('https://localhost:1296/api/track/medium')
+    return this.httpClient.get<IMedium[]>('http://localhost:1296/api/track/medium')
   }
 
   getCarts() : Observable<Cart[]>{
-    return this.httpClient.get<Cart[]>('https://localhost:1296/api/cart')
+    return this.httpClient.get<Cart[]>('http://localhost:1296/api/cart')
   }
   getLabels() {
-    return this.httpClient.get<ILabel[]>('https://localhost:1296/api/track/label')
+    return this.httpClient.get<ILabel[]>('http://localhost:1296/api/track/label')
   }
 
   getProducers() {
-    return this.httpClient.get<IProducer[]>('https://localhost:1296/api/track/producer')
+    return this.httpClient.get<IProducer[]>('http://localhost:1296/api/track/producer')
   }
 
   getTracks() {
-    return this.httpClient.get<ITrack[]>('https://localhost:1296/api/track/trackall')
+    return this.httpClient.get<ITrack[]>('http://localhost:1296/api/track/trackall')
   }
 
   getUsers() {
-    return this.httpClient.get<IUser[]>('https://localhost:1296/api/user/user')
+    return this.httpClient.get<IUser[]>('http://localhost:1296/api/user/user')
   }
 
   insertGenre(genreName: string){
     console.log(genreName)
-    this.httpClient.post('https://localhost:1296/api/track/genre', {'genreName' : genreName}, this.httpOptions ).subscribe(response => {
+    this.httpClient.post('http://localhost:1296/api/track/genre', {'genreName' : genreName}, this.httpOptions ).subscribe(response => {
       console.log(response)
     }, error => {
       console.log(error)
@@ -68,7 +68,7 @@ export class PanelService {
 
   insertMedium(mediumName: string){
     console.log(mediumName)
-    this.httpClient.post('https://localhost:1296/api/track/medium', {'mediumName' : mediumName}, this.httpOptions ).subscribe(response => {
+    this.httpClient.post('http://localhost:1296/api/track/medium', {'mediumName' : mediumName}, this.httpOptions ).subscribe(response => {
       console.log(response)
     }, error => {
       console.log(error)
@@ -78,7 +78,7 @@ export class PanelService {
 
   insertTrack(trackName: string, price: number, duration: number, genre: string, producer: number, label: number, medium: number, publishDate: string, quantity: number){
 
-    this.httpClient.post('https://localhost:1296/api/track', { 'trackName': trackName, 'price':price, 'duration':duration, 'publishDate': publishDate, 'pictureUrl': 'picture', 'quantity': quantity, 'labelId': label, 'mediumId':medium, 'producerId':producer, 'genreId' : genre}, this.httpOptions ).subscribe(response => {
+    this.httpClient.post('http://localhost:1296/api/track', { 'trackName': trackName, 'price':price, 'duration':duration, 'publishDate': publishDate, 'pictureUrl': 'picture', 'quantity': quantity, 'labelId': label, 'mediumId':medium, 'producerId':producer, 'genreId' : genre}, this.httpOptions ).subscribe(response => {
       console.log(response)
     }, error => {
       console.log(error)
@@ -88,7 +88,7 @@ export class PanelService {
 
   insertLabel(name: string, country: string, email: string){
     console.log(name)
-    this.httpClient.post('https://localhost:1296/api/track/label', {'name' : name,'email':email, 'country':country}, this.httpOptions ).subscribe(response => {
+    this.httpClient.post('http://localhost:1296/api/track/label', {'name' : name,'email':email, 'country':country}, this.httpOptions ).subscribe(response => {
       console.log(response)
     }, error => {
       console.log(error)
@@ -98,7 +98,7 @@ export class PanelService {
 
   insertProducer(name: string, surname: string, email: string, artistName: string, birthday: string, country: string){
     //console.log(mediumName)
-    this.httpClient.post('https://localhost:1296/api/track/producer', {'name' : name, 'surname':surname, 'email':email, 'artistName': artistName, 'birthday':birthday, 'country':country}, this.httpOptions ).subscribe(response => {
+    this.httpClient.post('http://localhost:1296/api/track/producer', {'name' : name, 'surname':surname, 'email':email, 'artistName': artistName, 'birthday':birthday, 'country':country}, this.httpOptions ).subscribe(response => {
       console.log(response)
     }, error => {
       console.log(error)
@@ -108,7 +108,7 @@ export class PanelService {
 
   insertUser(name: string,lastname: string,email: string,password: string,address: string,country: string,city: string,telephone: string){
     console.log(name,lastname,email,password,address,country,city,telephone)
-    this.httpClient.post('https://localhost:1296/api/user/user', {'name' : name,'lastname' : lastname,'password' : password,'email' : email,'address' : address,'country' : country,'city' : city,'telephone' : telephone}, this.httpOptions ).subscribe(response => {
+    this.httpClient.post('http://localhost:1296/api/user/user', {'name' : name,'lastname' : lastname,'password' : password,'email' : email,'address' : address,'country' : country,'city' : city,'telephone' : telephone}, this.httpOptions ).subscribe(response => {
       console.log(response)
     }, error => {
       console.log(error)
@@ -118,7 +118,7 @@ export class PanelService {
 
 
   deleteGenre(id) {
-    this.httpClient.delete('https://localhost:1296/api/track/genre/'+id,this.httpOptions).subscribe(res => {
+    this.httpClient.delete('http://localhost:1296/api/track/genre/'+id,this.httpOptions).subscribe(res => {
       console.log(res)
     }, error => {
       console.log(error)
@@ -127,7 +127,7 @@ export class PanelService {
   }
 
   deleteMedium(id) {
-    this.httpClient.delete('https://localhost:1296/api/track/medium/'+id,this.httpOptions).subscribe(res => {
+    this.httpClient.delete('http://localhost:1296/api/track/medium/'+id,this.httpOptions).subscribe(res => {
       console.log(res)
     }, error => {
       console.log(error)
@@ -136,7 +136,7 @@ export class PanelService {
   }
 
   deleteTrack(id) {
-    this.httpClient.delete('https://localhost:1296/api/track/'+id,this.httpOptions).subscribe(res => {
+    this.httpClient.delete('http://localhost:1296/api/track/'+id,this.httpOptions).subscribe(res => {
       console.log(res)
     }, error => {
       console.log(error)
@@ -145,7 +145,7 @@ export class PanelService {
   }
 
   deleteLabel(id) {
-    this.httpClient.delete('https://localhost:1296/api/track/label/'+id,this.httpOptions).subscribe(res => {
+    this.httpClient.delete('http://localhost:1296/api/track/label/'+id,this.httpOptions).subscribe(res => {
       console.log(res)
     }, error => {
       console.log(error)
@@ -154,7 +154,7 @@ export class PanelService {
   }
 
   deleteProducer(id) {
-    this.httpClient.delete('https://localhost:1296/api/track/producer/'+id,this.httpOptions).subscribe(res => {
+    this.httpClient.delete('http://localhost:1296/api/track/producer/'+id,this.httpOptions).subscribe(res => {
       console.log(res)
     }, error => {
       console.log(error)
@@ -163,7 +163,7 @@ export class PanelService {
   }
 
   deleteUser(id) {
-    this.httpClient.delete('https://localhost:1296/api/user/'+id,this.httpOptions).subscribe(res => {
+    this.httpClient.delete('http://localhost:1296/api/user/'+id,this.httpOptions).subscribe(res => {
       console.log(res)
     }, error => {
       console.log(error)
@@ -172,7 +172,7 @@ export class PanelService {
   }
 
   deleteCart(id) {
-    this.httpClient.delete('https://localhost:1296/api/cart/'+id,this.httpOptions).subscribe(res => {
+    this.httpClient.delete('http://localhost:1296/api/cart/'+id,this.httpOptions).subscribe(res => {
       console.log(res)
     }, error => {
       console.log(error)

@@ -43,13 +43,12 @@ public class CartController : BaseApiController
         //return _mapper.Map<Cart, CartDto>(cart);
         return cart;
     }
-
+    
     [HttpPost]
     public async Task<ActionResult<Cart>> CreateCart(CartDto cartDto)
     {
-        decimal subtotal = 0;
-        
 
+        decimal subtotal = 0;
         foreach (var item in cartDto.CartItems)
         {
 
@@ -62,40 +61,17 @@ public class CartController : BaseApiController
             }
             subtotal += (track.Result.Price*item.Quantity);
         }
-        
-        
+
         try
         {
-            var cart = new Cart
-            {
-                OrderDate = cartDto.OrderDate,
-                FirstName = cartDto.FirstName,
-                LastName = cartDto.LastName,
-                City = cartDto.City,
-                Address = cartDto.Address,
-                Comment = cartDto.Comment,
-                Payment = cartDto.Payment,
-                Subtotal = subtotal,
-                PaymentMethod = cartDto.PaymentMethod
-            };
-
-            _cartRepository.CreateCart(cart);
-            //Console.WriteLine(cartDto.CartItems);
-            foreach (var item in cartDto.CartItems)
-            {
-                
-                
-                CartItemDto cartItemDto = new CartItemDto();
-                cartItemDto.CartId = cart.Id;
-                cartItemDto.Quantity = item.Quantity;
-                cartItemDto.TrackId = item.TrackId;
-                _cartItemRepository.CreateCartItem(_mapper.Map<CartItemDto,CartItem>(cartItemDto));
-                
-            }
+            var cart = _mapper.Map<Cart>(cartDto);
+            cart.Subtotal = subtotal;
 
             
+
             
-            return Ok(cart);
+
+            return Ok(await _cartRepository.CreateCart(cart));
         }
         catch (Exception e)
         {
