@@ -13,6 +13,10 @@ public interface ICartRepository
     public void RemoveCart(int Id);
     public Task<List<Cart>> GetCarts();
 
+    public Task<Cart> UpdateCart(Cart cart);
+
+    public Task<Cart> GetCartByUserId(int id);
+
     public bool SaveChanges();
 
 }

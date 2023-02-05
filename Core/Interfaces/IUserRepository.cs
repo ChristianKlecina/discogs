@@ -9,6 +9,8 @@ public interface IUserRepository
 
     public Task<User> Register(User user);
 
+    public int GetUserIdByEmail(string email);
+
     public void DeleteUser(int id);
     
     public Task<User> UpdateUser (User user);

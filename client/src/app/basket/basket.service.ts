@@ -86,8 +86,8 @@ export class BasketService {
   addCart(form: FormGroup){
 
 
-    this.cart.firstName = form.get('firstName').value;
-    this.cart.lastName = form.get('lastName').value;
+    // this.cart.firstName = form.get('firstName').value;
+    // this.cart.lastName = form.get('lastName').value;
     this.cart.address = form.get('address').value;
     this.cart.city = form.get('city').value;
     this.cart.payment = false
@@ -95,6 +95,7 @@ export class BasketService {
     this.cart.cartItems = this.cartItems
     this.cart.comment = form.get('comment').value
     this.cart.subtotal = this.getTotalPrice()
+    this.cart.userId = +localStorage.getItem('currentUserId')
     console.log(this.cart)
 
     this.httpClient.post<Cart>('http://localhost:1296/api/cart', this.cart).subscribe(data => {

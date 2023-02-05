@@ -21,7 +21,7 @@ public class StoreContext : DbContext
 
     public DbSet<Medium> Medium { get; set; }
 
-    public DbSet<Order> Order { get; set; }
+    
 
     public DbSet<User> User { get; set; }
 
@@ -229,8 +229,7 @@ public class StoreContext : DbContext
                 PaymentMethod = "",
                 Payment = false,
                 City = "Indjija",
-                FirstName = "Kristian",
-                LastName = "Klecina"
+                UserId = 1
             }
             );
         modelBuilder.Entity<CartItem>().HasData(
@@ -242,19 +241,7 @@ public class StoreContext : DbContext
                 Quantity = 1
             }
             );
-        modelBuilder.Entity<Order>().HasData(
-            new
-            {
-                Id = 1,
-                OrderDate = new DateTime(2022,4,4),
-                Subtotal = 10.23M,
-                Comment = "",
-                PaymentMethod = "On recieve",
-                Payment = false,
-                UserId = 2
-                
-            }
-            );
+        
         
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
     }

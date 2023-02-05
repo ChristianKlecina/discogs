@@ -23,11 +23,27 @@ public class CartRepository : ICartRepository
         
         return cart ; 
     }
+    
+    public async Task<Cart> GetCartByUserId(int id)
+    {
+        var cart = await _context.Cart.Where(x => x.UserId == id).OrderBy(x => x.OrderDate).LastAsync();
+        
+        return cart ; 
+    }
 
     public async Task<List<Cart>> GetCarts()
     {
         
         return await _context.Cart.ToListAsync();
+    }
+
+    public Task<Cart> UpdateCart(Cart cart)
+    {
+        cart.Payment = true;
+        _context.Update(cart);
+        _context.SaveChanges();
+
+        return GetCartById(cart.Id);
     }
 
     public async Task<Cart> CreateCart(Cart cart)
@@ -36,6 +52,8 @@ public class CartRepository : ICartRepository
         { 
             _context.Cart.Add(cart); 
             _context.SaveChanges();
+            
+            
 
         }
         

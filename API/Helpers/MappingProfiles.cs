@@ -1,5 +1,6 @@
 ﻿using API.Dtos;
 using AutoMapper;
+using AutoMapper.Configuration.Annotations;
 using Core.Entities;
 
 namespace API.Helpers;
@@ -17,10 +18,12 @@ public class MappingProfiles : Profile
 
         CreateMap<AdminRegisterDto, User>().ReverseMap();
         CreateMap<User, User>();
+        CreateMap<UserRegisterDto, User>();
         CreateMap<TrackToReturnDto, Track>()
             .ForMember(x => x.Genre, o => o.MapFrom(p => p.Genre));
         CreateMap<Track, Track>();
-
+        CreateMap<TrackCreationDto, Track>().ReverseMap();
+            
         CreateMap<Cart, CartDto>().ReverseMap();
         CreateMap<CartItem, CartItemDto>().ReverseMap();
     }

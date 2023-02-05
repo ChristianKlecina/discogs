@@ -17,8 +17,8 @@ export class CheckoutDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.submitForm = new FormGroup({
-      firstName : new FormControl(),
-      lastName : new FormControl(),
+      // firstName : new FormControl(),
+      // lastName : new FormControl(),
       address : new FormControl(),
       city : new FormControl(),
       comment : new FormControl(),

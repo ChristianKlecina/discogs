@@ -15,6 +15,7 @@ export class LoggingService {
   invalidLogin: boolean
   private currentUserSource = new BehaviorSubject<IPersistedUser>(null);
   currentUser$ = this.currentUserSource.asObservable();
+  currentUserId : number;
 
 
 
@@ -32,7 +33,10 @@ export class LoggingService {
       const token = this.currentUserSource.getValue().token
       localStorage.setItem("jwt",token);
       console.log(localStorage.getItem('jwt'))
-
+      this.httpClient.get<number>("http://localhost:1296/api/user/email/" + response.email).subscribe(id => {
+        this.currentUserId = id
+        localStorage.setItem("currentUserId",id.toString());
+      })
       var userjson = window.atob(localStorage.getItem('jwt').split('.')[1])
       //console.log(JSON.parse(this.userjson).role)
       localStorage.setItem("role", JSON.parse(userjson).role)
@@ -41,7 +45,11 @@ export class LoggingService {
       this.mat.closeAll()
       this.router.navigateByUrl('/shop')
 
+
+
       location.reload()
+
+
 
       // console.log(localStorage.getItem('role'))
       // console.log(localStorage.getItem('jwt'))
@@ -54,9 +62,12 @@ export class LoggingService {
     })
   }
 
+
+
   logout(){
     localStorage.removeItem('role');
     localStorage.removeItem('jwt');
+    localStorage.removeItem('currentUserId');
     this.router.navigateByUrl('/home')
     location.reload()
 
@@ -71,8 +82,6 @@ export class LoggingService {
     }, error => {
       console.log(error)
     })
-
-
     this.mat.closeAll()
   }
 

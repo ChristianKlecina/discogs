@@ -18,9 +18,12 @@ public class Cart : BaseEntity
     
     public string City { get; set; }
     
-    public string FirstName { get; set; }
+    //public string FirstName { get; set; }
     
-    public string LastName { get; set; }
+    //public string LastName { get; set; }
+    
+    public virtual User User { get; set; }
+    public int  UserId { get; set; }
 
 
     public virtual ICollection<CartItem> CartItems { get; set; } = new List<CartItem>();

@@ -65,6 +65,16 @@ public class UsersRepository : IUserRepository
         }
         return false;
     }
+    
+    public int GetUserIdByEmail(string email)
+    {
+        var user = _context.User.FirstOrDefault(x => x.Email == email);
+        if (user != null)
+        {
+            return user.Id;
+        }
+        return 0;
+    }
 
     public async Task<IReadOnlyList<User>> ListAllAsync()
     {

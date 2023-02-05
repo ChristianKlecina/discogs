@@ -139,7 +139,7 @@ public class UserController : BaseApiController
         if (id != null)
         {
             var user = _userRepo.GetUserById(id);
-            return Ok( user);
+            return Ok(user);
         }
 
         return NoContent();
@@ -172,6 +172,12 @@ public class UserController : BaseApiController
         }
 
         return null;
+    }
+
+    [HttpGet("email/{email}")]
+    public int GetUserIdByEmail(string email)
+    {
+        return _userRepo.GetUserIdByEmail(email);
     }
 
     //Ovu metodu za sada nećeš koristiti

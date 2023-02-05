@@ -6,8 +6,9 @@ export class Cart{
   orderDate = new Date();
   subtotal: number;
   comment: string;
-  firstName: string;
-  lastName: string
+  // firstName: string;
+  // lastName: string
+  userId: number
   city: string;
   address: string;
   paymentMethod: string;

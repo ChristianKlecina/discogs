@@ -8,7 +8,7 @@ public class TrackConfiguration : IEntityTypeConfiguration<Track>
 {
     public void Configure(EntityTypeBuilder<Track> builder)
     {
-        builder.Property(p => p.Id).IsRequired().ValueGeneratedOnAdd();
+        builder.Property(p => p.Id).IsRequired().UseIdentityColumn();
         builder.Property(p => p.PictureUrl).IsRequired();
         builder.Property(p => p.TrackName).IsRequired().HasMaxLength(50);
         builder.HasOne(p => p.Producer).WithMany().HasForeignKey(p => p.ProducerId);

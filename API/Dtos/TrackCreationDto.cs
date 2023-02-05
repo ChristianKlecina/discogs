@@ -2,7 +2,7 @@
 
 namespace API.Dtos;
 
-public class TrackCreationDto : BaseEntity
+public class TrackCreationDto 
 {
     public string TrackName { get; set; }
     
@@ -15,8 +15,6 @@ public class TrackCreationDto : BaseEntity
     public DateTime PublishDate { get; set; }
     
     public string PictureUrl { get; set; }
-    
-
     
     public int GenreId { get; set; }
     

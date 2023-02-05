@@ -19,20 +19,22 @@ public class TrackController : BaseApiController
     private readonly IGenericRepository<Medium> _mediumRepo;
     private readonly IGenericRepository<Producer> _producerRepo;
     private readonly IGenericRepository<Label> _labelRepo;
-    private readonly IGenericRepository<TrackCreationDto> _trackCreationRepo;
+    
     private readonly IMapper _mapper;
+    
 
     public TrackController(IGenericRepository<Track> tracksRepo,IGenericRepository<Genre> genresRepo, 
         IGenericRepository<Medium> mediumRepo, IGenericRepository<Producer> producerRepo, IGenericRepository<Label> labelRepo, 
-        IGenericRepository<TrackCreationDto> trackCreationRepo,IMapper mapper)
+        IMapper mapper)
     {
         _trackRepo = tracksRepo;
         _genresRepo = genresRepo;
         _mediumRepo = mediumRepo;
         _producerRepo = producerRepo;
         _labelRepo = labelRepo;
-        _trackCreationRepo = trackCreationRepo;
+        
         _mapper = mapper;
+        
     }
     
     [HttpGet("{id}")]
@@ -91,9 +93,36 @@ public class TrackController : BaseApiController
             if (trackDto != null)
             {
 
-
                 
-                return Ok(await _trackRepo.CreateAsync(_mapper.Map<Track>(trackDto)));
+                var track = new Track
+                {
+                    
+                    TrackName = trackDto.TrackName,
+                    Price = trackDto.Price,
+                    Duration = trackDto.Duration,
+                    PublishDate = trackDto.PublishDate,
+                    PictureUrl = trackDto.PictureUrl,
+                    Quantity = trackDto.Quantity,
+                    GenreId = trackDto.GenreId,
+                    //Genre = _genresRepo.GetByIdAsync(trackDto.GenreId).Result,
+                    MediumId = trackDto.MediumId,
+                    //Medium = _mediumRepo.GetByIdAsync(trackDto.MediumId).Result,
+                    ProducerId = trackDto.ProducerId,
+                    //Producer = _producerRepo.GetByIdAsync(trackDto.ProducerId).Result,
+                    LabelId = trackDto.LabelId,
+                    //Label = _labelRepo.GetByIdAsync(trackDto.LabelId).Result,
+
+                };
+                var trackToInsert = _mapper.Map<Track>(trackDto);
+                Console.WriteLine("------------------");
+                Console.WriteLine(trackToInsert.GetType());
+                Console.WriteLine(trackToInsert.Id);
+                
+                await _trackRepo.CreateAsync(trackToInsert);
+                return Ok();
+                
+                
+                //return Ok(await _trackRepo.CreateAsync(_mapper.Map<Track>(trackDto)));
             }
 
             return NoContent();
@@ -105,6 +134,7 @@ public class TrackController : BaseApiController
         }
     }
 
+    /*
     [Authorize(Roles = "Admin")]
     [HttpPut]
     public async Task<ActionResult<Track>> UpdateTrack([FromBody] TrackCreationDto trackDto)
@@ -147,6 +177,7 @@ public class TrackController : BaseApiController
             throw;
         }
     }
+    */
     
     
     

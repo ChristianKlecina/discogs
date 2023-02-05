@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Stripe;
 using Stripe.Checkout;
-using Order = Core.Entities.Order;
+
 
 namespace API.Controllers;
 
@@ -23,15 +23,18 @@ public class PaymentController : BaseApiController
 {
     private readonly IConfiguration _configuration;
     private readonly ICartRepository _cartRepo;
+    private readonly IUserRepository _usereRepo;
 
 
     private readonly StripeSettings _settings;
     private static string s_wasmCLientURL = string.Empty;
+    private const string WhSecret = "whsec_37f9da37118a56e57fb4575498f0601361b762eb8b8fe3fb0f4ef5da0cb74a91";
 
-    public PaymentController(IOptions<StripeSettings> settings, IConfiguration configuration, ICartRepository cartRepo)
+    public PaymentController(IOptions<StripeSettings> settings, IConfiguration configuration, ICartRepository cartRepo, IUserRepository usereRepo)
     {
         _configuration = configuration;
         _cartRepo = cartRepo;
+        _usereRepo = usereRepo;
 
 
         _settings = settings.Value;
@@ -102,7 +105,8 @@ public class PaymentController : BaseApiController
         
         var options = new SessionCreateOptions
         {
-            SuccessUrl = $"{thisApiUrl}/api/payment/success?sessionId" + "{CHECKOUT_SESSION_ID}",
+            //SuccessUrl = $"{thisApiUrl}/api/payment/success?sessionId" + "{CHECKOUT_SESSION_ID}",
+            SuccessUrl = $"http://localhost:4200",
             //CancelUrl = s_wasmCLientURL + "failed",
             CancelUrl = "https://example.com/canceled.html",
             PaymentMethodTypes = new List<string>
@@ -119,7 +123,7 @@ public class PaymentController : BaseApiController
                         Currency = "usd",
                         ProductData = new SessionLineItemPriceDataProductDataOptions
                         {
-                            Name = cart.FirstName + " " + cart.LastName
+                            Name = "Cart"
                             
                         },
                     },
@@ -149,7 +153,50 @@ public class PaymentController : BaseApiController
         return Ok(session);
     }
 
-   
+
+    [HttpPost("webhook")]
+    public async Task<ActionResult> StripeWebhook()
+    {
+        var json = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
+
+        var stripeEvent = EventUtility.ConstructEvent(json, Request.Headers["Stripe-Signature"], WhSecret);
+
+        PaymentIntent intent;
+        Cart cart = new Cart();
+        Session session;
+        int userId;
+
+        switch (stripeEvent.Type)
+        {
+            case "payment_intent.succeeded":
+                Console.WriteLine("Ulazi u succeeded");
+                intent = (PaymentIntent)stripeEvent.Data.Object;
+                session = stripeEvent.Data.Object as Stripe.Checkout.Session;
+                //Console.WriteLine(session);
+                Console.WriteLine(intent);
+                Console.WriteLine(intent.Charges.Data[0].BillingDetails.Email);
+                userId = _usereRepo.GetUserIdByEmail(intent.Charges.Data[0].BillingDetails.Email);
+                Console.WriteLine("------------------------"+ userId + "---------------------------");
+                //cart = _cartRepo.GetCartByUserId(userId).Result;
+                Console.WriteLine("------------------------"+ _cartRepo.GetCartByUserId(userId).Result.Id + "---------------------------");
+                await _cartRepo.UpdateCart(_cartRepo.GetCartByUserId(userId).Result);
+                
+                
+                Console.WriteLine("GOOD");
+                
+                break;
+            case "payment_intent.failed":
+                intent = (PaymentIntent)stripeEvent.Data.Object;
+                session = stripeEvent.Data.Object as Stripe.Checkout.Session;
+                Console.WriteLine(session);
+                Console.WriteLine("BAD");
+                break;
+
+        }
+
+        return new EmptyResult();
+    }
+
 
         [HttpPost("create-checkout-session")]
     public async Task<IActionResult> CreateCheckoutSession([FromBody]CreateCheckoutSessionRequest req)
