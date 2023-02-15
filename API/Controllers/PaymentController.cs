@@ -119,7 +119,7 @@ public class PaymentController : BaseApiController
                 {
                     PriceData = new SessionLineItemPriceDataOptions()
                     {
-                        UnitAmount = (long)cart.Subtotal*100,
+                        UnitAmountDecimal = cart.Subtotal*100,
                         Currency = "usd",
                         ProductData = new SessionLineItemPriceDataProductDataOptions
                         {

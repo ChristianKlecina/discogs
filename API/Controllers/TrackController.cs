@@ -93,10 +93,9 @@ public class TrackController : BaseApiController
             if (trackDto != null)
             {
 
-                
+
                 var track = new Track
                 {
-                    
                     TrackName = trackDto.TrackName,
                     Price = trackDto.Price,
                     Duration = trackDto.Duration,
@@ -104,25 +103,18 @@ public class TrackController : BaseApiController
                     PictureUrl = trackDto.PictureUrl,
                     Quantity = trackDto.Quantity,
                     GenreId = trackDto.GenreId,
-                    //Genre = _genresRepo.GetByIdAsync(trackDto.GenreId).Result,
+                    Genre = _genresRepo.GetByIdAsync(trackDto.GenreId).Result,
                     MediumId = trackDto.MediumId,
-                    //Medium = _mediumRepo.GetByIdAsync(trackDto.MediumId).Result,
+                    Medium = _mediumRepo.GetByIdAsync(trackDto.MediumId).Result,
                     ProducerId = trackDto.ProducerId,
-                    //Producer = _producerRepo.GetByIdAsync(trackDto.ProducerId).Result,
+                    Producer = _producerRepo.GetByIdAsync(trackDto.ProducerId).Result,
                     LabelId = trackDto.LabelId,
-                    //Label = _labelRepo.GetByIdAsync(trackDto.LabelId).Result,
+                    Label = _labelRepo.GetByIdAsync(trackDto.LabelId).Result,
 
                 };
-                var trackToInsert = _mapper.Map<Track>(trackDto);
-                Console.WriteLine("------------------");
-                Console.WriteLine(trackToInsert.GetType());
-                Console.WriteLine(trackToInsert.Id);
-                
-                await _trackRepo.CreateAsync(trackToInsert);
-                return Ok();
-                
-                
-                //return Ok(await _trackRepo.CreateAsync(_mapper.Map<Track>(trackDto)));
+
+                _trackRepo.CreateAsync(track);
+                return Ok(track);
             }
 
             return NoContent();
